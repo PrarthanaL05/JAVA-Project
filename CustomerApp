@@ -1,0 +1,126 @@
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class CustomerApp {
+
+    // Customer class implementing JavaBeans principles
+    public static class Customer implements Serializable {
+        private int id;
+        private double balance;
+        private String firstName;
+        private String lastName;
+
+        // No-argument constructor
+        public Customer() {
+        }
+
+        // Constructor with all fields
+        public Customer(int id, String firstName, String lastName, double balance) {
+            this.id = id;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.balance = balance;
+        }
+
+        // Getter and Setter for ID
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        // Getter and Setter for Balance
+        public double getBalance() {
+            return balance;
+        }
+
+        public void setBalance(double balance) {
+            this.balance = balance;
+        }
+
+        // Getter and Setter for First Name
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        // Getter and Setter for Last Name
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        @Override
+        public String toString() {
+            return "Customer [ID=" + id + ", Name=" + firstName + " " + lastName + ", Balance=" + balance + "]";
+        }
+    }
+
+    // Comparator for sorting customers
+    public static class CustomerComparator implements Comparator<Customer> {
+
+        @Override
+        public int compare(Customer c1, Customer c2) {
+            // Compare First Name
+            int firstNameComparison = c1.getFirstName().compareTo(c2.getFirstName());
+            if (firstNameComparison != 0) {
+                return firstNameComparison;
+            }
+
+            // Compare Last Name if First Name is the same
+            int lastNameComparison = c1.getLastName().compareTo(c2.getLastName());
+            if (lastNameComparison != 0) {
+                return lastNameComparison;
+            }
+
+            // Compare ID if First and Last Names are the same
+            if (c1.getId() != c2.getId()) {
+                return Integer.compare(c1.getId(), c2.getId());
+            }
+
+            // Compare Balance if First Name, Last Name, and ID are the same
+            return Double.compare(c1.getBalance(), c2.getBalance());
+        }
+    }
+
+    public static void main(String[] args) {
+        // Create some customer objects
+        Customer customer1 = new Customer(1, "John", "Doe", 500.75);
+        Customer customer2 = new Customer(2, "Alice", "Smith", 300.50);
+        Customer customer3 = new Customer(3, "John", "Smith", 400.00);
+        Customer customer4 = new Customer(4, "Alice", "Doe", 350.25);
+
+        // Create a list of customers
+        List<Customer> customers = new ArrayList<>();
+        customers.add(customer1);
+        customers.add(customer2);
+        customers.add(customer3);
+        customers.add(customer4);
+
+        // Display customers before sorting
+        System.out.println("Before sorting:");
+        for (Customer customer : customers) {
+            System.out.println(customer);
+        }
+
+        // Sort the list using the custom comparator
+        Collections.sort(customers, new CustomerComparator());
+
+        // Display customers after sorting
+        System.out.println("\nAfter sorting:");
+        for (Customer customer : customers) {
+            System.out.println(customer);
+        }
+    }
+}
